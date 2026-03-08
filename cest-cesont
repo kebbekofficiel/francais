@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apprendre le français · C'est / Ce sont</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:      #1a1208;
+      --cream:    #f5f0e8;
+      --gold:     #c8922a;
+      --gold-lt:  #e8c060;
+      --rust:     #8b3a1a;
+      --pale:     #ede8dc;
+      --green:    #3a6b4a;
+    }
+
+    body {
+      background-color: var(--cream);
+      color: var(--ink);
+      font-family: 'Crimson Pro', Georgia, serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background-image:
+        radial-gradient(ellipse at 20% 10%, rgba(200,146,42,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 90%, rgba(139,58,26,0.07) 0%, transparent 55%);
+    }
+
+    .card {
+      background: var(--cream);
+      border: 1px solid rgba(200,146,42,0.35);
+      box-shadow:
+        0 2px 6px rgba(0,0,0,0.08),
+        0 12px 40px rgba(0,0,0,0.10),
+        inset 0 0 60px rgba(200,146,42,0.04);
+      max-width: 640px;
+      width: 100%;
+      padding: 3.5rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--rust), var(--gold), var(--rust));
+    }
+
+    .card::after {
+      content: '✦';
+      position: absolute;
+      bottom: 1.4rem;
+      right: 1.8rem;
+      font-size: 0.9rem;
+      color: var(--gold);
+      opacity: 0.5;
+    }
+
+    .ornament {
+      text-align: center;
+      font-size: 1.4rem;
+      color: var(--gold);
+      letter-spacing: .5rem;
+      margin-bottom: 1.6rem;
+      opacity: 0.7;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--ink);
+      text-align: center;
+      margin-bottom: .5rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--rust);
+      margin-bottom: 2.4rem;
+    }
+
+    .screen { animation: fadeIn .5s ease both; }
+    .screen.hidden { display: none; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .lang-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: .85rem;
+      margin-top: 1.8rem;
+    }
+
+    .lang-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .4rem;
+      padding: .9rem .6rem;
+      border: 1.5px solid rgba(200,146,42,0.3);
+      background: transparent;
+      cursor: pointer;
+      font-family: 'Crimson Pro', serif;
+      font-size: 1rem;
+      color: var(--ink);
+      transition: all .2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lang-btn .flag { font-size: 1.8rem; line-height: 1; }
+    .lang-btn .name { font-size: .95rem; }
+
+    .lang-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(200,146,42,0.12), transparent);
+      opacity: 0;
+      transition: opacity .2s;
+    }
+
+    .lang-btn:hover { border-color: var(--gold); color: var(--rust); }
+    .lang-btn:hover::before { opacity: 1; }
+    .lang-btn:hover .flag { transform: scale(1.1); transition: transform .2s; }
+
+    .lang-btn.selected {
+      border-color: var(--gold);
+      background: rgba(200,146,42,0.12);
+      color: var(--rust);
+      font-weight: 600;
+    }
+
+    .btn-continue {
+      display: block;
+      width: 100%;
+      margin-top: 2rem;
+      padding: 1rem 1.5rem;
+      background: var(--ink);
+      color: var(--cream);
+      border: none;
+      cursor: pointer;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      letter-spacing: .06em;
+      transition: background .2s, transform .15s;
+    }
+    .btn-continue:hover { background: var(--rust); transform: translateY(-1px); }
+    .btn-continue:disabled { opacity: .35; cursor: default; transform: none; background: var(--ink); }
+
+    /* ── EXPLICATION ── */
+    .rule-box {
+      background: var(--pale);
+      border-left: 3px solid var(--gold);
+      padding: 1.2rem 1.4rem;
+      margin: 1.4rem 0;
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .rule-box.green {
+      border-left-color: var(--green);
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1.4rem 0;
+    }
+
+    @media (max-width: 480px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    .col-box {
+      background: var(--pale);
+      padding: 1rem 1.2rem;
+      border-top: 3px solid var(--gold);
+    }
+
+    .col-box.right { border-top-color: var(--green); }
+
+    .col-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      margin-bottom: .5rem;
+    }
+
+    .example {
+      display: flex;
+      align-items: baseline;
+      gap: .7rem;
+      margin: .5rem 0;
+      flex-wrap: wrap;
+    }
+
+    .example .fr {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.25rem;
+      color: var(--rust);
+    }
+
+    .example .arrow { color: var(--gold); font-size: .9rem; }
+
+    .tip {
+      border: 1px dashed rgba(200,146,42,0.4);
+      padding: 1rem 1.2rem;
+      font-size: .98rem;
+      font-style: italic;
+      color: #555;
+      margin-top: 1.4rem;
+      line-height: 1.6;
+    }
+
+    .divider {
+      text-align: center;
+      color: var(--gold);
+      letter-spacing: .4rem;
+      font-size: .8rem;
+      margin: 1.6rem 0;
+      opacity: .6;
+    }
+
+    p { line-height: 1.75; font-size: 1.05rem; margin-bottom: .8rem; }
+
+    .hl  { color: var(--rust); font-weight: 600; }
+    .hlg { color: var(--green); font-weight: 600; }
+
+    .btn-back {
+      background: transparent;
+      border: 1px solid rgba(0,0,0,0.2);
+      color: #777;
+      font-family: 'Crimson Pro', serif;
+      font-size: .95rem;
+      cursor: pointer;
+      padding: .5rem 1rem;
+      margin-top: 1.8rem;
+      transition: color .2s, border-color .2s;
+    }
+    .btn-back:hover { color: var(--rust); border-color: var(--rust); }
+
+    .home-link {
+      display: inline-block;
+      margin-top: .6rem;
+      margin-left: .5rem;
+      font-size: .9rem;
+      color: var(--gold);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color .2s;
+    }
+    .home-link:hover { border-bottom-color: var(--gold); }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- ══ SCREEN 1 ══ -->
+  <div id="screen1" class="screen">
+    <div class="ornament">✦ ✦ ✦</div>
+    <h1>Quelle est votre langue maternelle&nbsp;?</h1>
+    <p class="subtitle">What is your native language?</p>
+
+    <div class="lang-grid">
+      <button class="lang-btn" data-lang="fr" onclick="selectLang(this)">
+        <span class="flag">🇫🇷</span><span class="name">Français</span>
+      </button>
+      <button class="lang-btn" data-lang="en" onclick="selectLang(this)">
+        <span class="flag">🇬🇧</span><span class="name">English</span>
+      </button>
+      <button class="lang-btn" data-lang="es" onclick="selectLang(this)">
+        <span class="flag">🇪🇸</span><span class="name">Español</span>
+      </button>
+      <button class="lang-btn" data-lang="pt" onclick="selectLang(this)">
+        <span class="flag">🇧🇷</span><span class="name">Português</span>
+      </button>
+      <button class="lang-btn" data-lang="de" onclick="selectLang(this)">
+        <span class="flag">🇩🇪</span><span class="name">Deutsch</span>
+      </button>
+      <button class="lang-btn" data-lang="it" onclick="selectLang(this)">
+        <span class="flag">🇮🇹</span><span class="name">Italiano</span>
+      </button>
+      <button class="lang-btn" data-lang="ar" onclick="selectLang(this)">
+        <span class="flag">🇸🇦</span><span class="name">العربية</span>
+      </button>
+      <button class="lang-btn" data-lang="zh" onclick="selectLang(this)">
+        <span class="flag">🇨🇳</span><span class="name">中文</span>
+      </button>
+    </div>
+
+    <button class="btn-continue" id="btnContinue" disabled onclick="showExplanation()">
+      Continuer →
+    </button>
+  </div>
+
+  <!-- ══ SCREEN 2 ══ -->
+  <div id="screen2" class="screen hidden"></div>
+
+</div>
+
+<script>
+  let selectedLang = null;
+
+  function selectLang(btn) {
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedLang = btn.dataset.lang;
+    document.getElementById('btnContinue').disabled = false;
+  }
+
+  const content = {
+
+    fr: {
+      title: "C'est / Ce sont",
+      sub: "Comment présenter et identifier en français",
+      body: `
+        <p>Ces deux expressions servent à <strong>identifier</strong>, <strong>présenter</strong> ou <strong>décrire</strong> quelqu'un ou quelque chose. Le choix entre les deux dépend uniquement du nombre de ce qui suit.</p>
+        <div class="two-col">
+          <div class="col-box">
+            <h3><span class="hl">C'est</span> + singulier</h3>
+            <p style="font-size:.95rem;">Suivi d'un nom singulier ou d'un pronom.</p>
+          </div>
+          <div class="col-box right">
+            <h3><span class="hlg">Ce sont</span> + pluriel</h3>
+            <p style="font-size:.95rem;">Suivi d'un nom au pluriel.</p>
+          </div>
+        </div>
+        <div class="divider">· · ·</div>
+        <p><strong>Exemples :</strong></p>
+        <div class="example"><span class="fr">C'est un livre.</span><span class="arrow">→</span><span>Singulier</span></div>
+        <div class="example"><span class="fr">C'est mon ami Paul.</span><span class="arrow">→</span><span>Présentation</span></div>
+        <div class="example"><span class="fr">C'est beau !</span><span class="arrow">→</span><span>+ adjectif (toujours <em>c'est</em>)</span></div>
+        <div class="example"><span class="fr">Ce sont des étudiants.</span><span class="arrow">→</span><span>Pluriel</span></div>
+        <div class="example"><span class="fr">Ce sont mes amis.</span><span class="arrow">→</span><span>Pluriel avec possessif</span></div>
+        <div class="tip">
+          💡 <strong>À retenir :</strong> Avec un adjectif seul (<em>c'est bon, c'est vrai…</em>), on utilise toujours <em>c'est</em>, jamais <em>ce sont</em>.
+        </div>
+      `
+    },
+
+    en: {
+      title: "C'est vs Ce sont",
+      sub: "How to say \"it is\" and \"they are\" in French",
+      body: `
+        <p>Both expressions translate roughly as <em>"it is"</em> or <em>"they are"</em> in English, but in French the choice depends on whether what follows is <strong>singular or plural</strong>.</p>
+        <div class="two-col">
+          <div class="col-box">
+            <h3><span class="hl">C'est</span> = singular</h3>
+            <p style="font-size:.95rem;">Used before a singular noun, a name, or a pronoun.</p>
+          </div>
+          <div class="col-box right">
+            <h3><span class="hlg">Ce sont</span> = plural</h3>
+            <p style="font-size:.95rem;">Used before a plural noun.</p>
+          </div>
+        </div>
+        <div class="divider">· · ·</div>
+        <p><strong>Examples:</strong></p>
+        <div class="example"><span class="fr">C'est un livre.</span><span class="arrow">→</span><span>It's a book.</span></div>
+        <div class="example"><span class="fr">C'est mon ami Paul.</span><span class="arrow">→</span><span>This is my friend Paul.</span></div>
+        <div class="example"><span class="fr">C'est beau !</span><span class="arrow">→</span><span>It's beautiful! (adjective → always <em>c'est</em>)</span></div>
+        <div class="example"><span class="fr">Ce sont des étudiants.</span><span class="arrow">→</span><span>They are students.</span></div>
+        <div class="example"><span class="fr">Ce sont mes amis.</span><span class="arrow">→</span><span>These are my friends.</span></div>
+        <div class="tip">
+          💡 <strong>Key tip:</strong> Before a lone adjective (<em>c'est bon, c'est vrai…</em>), always use <em>c'est</em> — never <em>ce sont</em>.
+        </div>
+      `
+    },
+
+    es: {
+      title: "C'est vs Ce sont",
+      sub: "Cómo decir \"es\" y \"son\" en francés",
+      body: `
+        <p>Estas dos expresiones equivalen al español <em>"es"</em> o <em>"son"</em>. La elección depende únicamente del número del sustantivo que sigue: <strong>singular o plural</strong>.</p>
+        <div class="two-col">
+          <div class="col-box">
+            <h3><span class="hl">C'est</span> = singular</h3>
+            <p style="font-size:.95rem;">Antes de un sustantivo singular, un nombre propio o un pronombre.</p>
+          </div>
+          <div class="col-box right">
+            <h3><span class="hlg">Ce sont</span> = plural</h3>
+            <p style="font-size:.95rem;">Antes de un sustantivo en plural.</p>
+          </div>
+        </div>
+        <div class="divider">· · ·</div>
+        <p><strong>Ejemplos:</strong></p>
+        <div class="example"><span class="fr">C'est un livre.</span><span class="arrow">→</span><span>Es un libro.</span></div>
+        <div class="example"><span class="fr">C'est mon ami Paul.</span><span class="arrow">→</span><span>Este es mi amigo Paul.</span></div>
+        <div class="example"><span class="fr">C'est beau !</span><span class="arrow">→</span><span>¡Es bonito! (adjetivo → siempre <em>c'est</em>)</span></div>
+        <div class="example"><span class="fr">Ce sont des étudiants.</span><span class="arrow">→</span><span>Son estudiantes.</span></div>
+        <div class="example"><span class="fr">Ce sont mes amis.</span><span class="arrow">→</span><span>Estos son mis amigos.</span></div>
+        <div class="tip">
+          💡 <strong>Para recordar:</strong> Con un adjetivo solo (<em>c'est bon, c'est vrai…</em>), siempre se usa <em>c'est</em>, nunca <em>ce sont</em>.
+        </div>
+      `
+    },
+
+    pt: {
+      title: "C'est vs Ce sont",
+      sub: "Como dizer \"é\" e \"são\" em francês",
+      body: `
+        <p>Estas duas expressões equivalem ao português <em>"é"</em> ou <em>"são"</em>. A escolha depende apenas do número do que vem a seguir: <strong>singular ou plural</strong>.</p>
+        <div class="two-col">
+          <div class="col-box">
+            <h3><span class="hl">C'est</span> = singular</h3>
+            <p style="font-size:.95rem;">Antes de um substantivo singular, um nome próprio ou pronome.</p>
+          </div>
+          <div class="col-box right">
+            <h3><span class="hlg">Ce sont</span> = plural</h3>
+            <p style="font-size:.95rem;">Antes de um substantivo no plural.</p>
+          </div>
+        </div>
+        <div class="divider">· · ·</div>
+        <p><strong>Exemplos:</strong></p>
+        <div class="example"><span class="fr">C'est un livre.</span><span class="arrow">→</span><span>É um livro.</span></div>
+        <div class="example"><span class="fr">C'est mon ami Paul.</span><span class="arrow">→</span><span>Este é o meu amigo Paul.</span></div>
+        <div class="example"><span class="fr">C'est beau !</span><span class="arrow">→</span><span>É bonito! (adjetivo → sempre <em>c'est</em>)</span></div>
+        <div class="example"><span class="fr">Ce sont des étudiants.</span><span class="arrow">→</span><span>São estudantes.</span></div>
+        <div class="example"><span class="fr">Ce sont mes amis.</span><span class="arrow">→</span><span>Estes são os meus amigos.</span></div>
+        <div class="tip">
+          💡 <strong>Para lembrar:</strong> Com um adjetivo sozinho (<em>c'est bon, c'est vrai…</em>), usa-se sempre <em>c'est</em>, nunca <em>ce sont</em>.
+        </div>
+      `
+    },
+
+    de: {
+      title: "C'est vs Ce sont",
+      sub: "„Es ist" und „Es sind" auf Französisch",
+      body: `
+        <p>Diese beiden Ausdrücke entsprechen dem deutschen <em>„es ist"</em> bzw. <em>„es sind"</em>. Die Wahl hängt allein vom Numerus des folgenden Nomens ab: <strong>Singular oder Plural</strong>.</p>
+        <div class="two-col">
+          <div class="col-box">
+            <h3><span class="hl">C'est</span> = Singular</h3>
+            <p style="font-size:.95rem;">Vor einem Singular-Nomen, einem Eigennamen oder Pronomen.</p>
+          </div>
+          <div class="col-box right">
+            <h3><span class="hlg">Ce sont</span> = Plural</h3>
+            <p style="font-size:.95rem;">Vor einem Nomen im Plural.</p>
+          </div>
+        </div>
+        <div class="divider">· · ·</div>
+        <p><strong>Beispiele:</strong></p>
+        <div class="example"><span class="fr">C'est un livre.</span><span class="arrow">→</span><span>Es ist ein Buch.</span></div>
+        <div class="example"><span class="fr">C'est mon ami Paul.</span><span class="arrow">→</span><span>Das ist mein Freund Paul.</span></div>
+        <div class="example"><span class="fr">C'est beau !</span><span class="arrow">→</span><span>Es ist schön! (Adjektiv → immer <em>c'est</em>)</span></div>
+        <div class="example"><span class="fr">Ce sont des étudiants.</span><span class="arrow">→</span><span>Es sind Studierende.</span></div>
+        <div class="example"><span class="fr">Ce sont mes amis.</span><span class="arrow">→</span><span>Das sind meine Freunde.</span></div>
+        <div class="tip">
+          💡 <strong>Merkhilfe:</strong> Vor einem alleinstehenden Adjektiv (<em>c'est bon, c'est vrai…</em>) steht immer <em>c'est</em> — nie <em>ce sont</em>.
+        </div>
+      `
+    },
+
+    it: {
+      title: "C'est vs Ce sont",
+      sub: "Come dire \"è\" e \"sono\" in francese",
+      body: `
+        <p>Queste due espressioni corrispondono all'italiano <em>"è"</em> e <em>"sono"</em>. La scelta dipende unicamente dal numero del sostantivo che segue: <strong>singolare o plurale</strong>.</p>
+        <div class="two-col">
+          <div class="col-box">
+            <h3><span class="hl">C'est</span> = singolare</h3>
+            <p style="font-size:.95rem;">Prima di un sostantivo singolare, un nome proprio o un pronome.</p>
+          </div>
+          <div class="col-box right">
+            <h3><span class="hlg">Ce sont</span> = plurale</h3>
+            <p style="font-size:.95rem;">Prima di un sostantivo al plurale.</p>
+          </div>
+        </div>
+        <div class="divider">· · ·</div>
+        <p><strong>Esempi:</strong></p>
+        <div class="example"><span class="fr">C'est un livre.</span><span class="arrow">→</span><span>È un libro.</span></div>
+        <div class="example"><span class="fr">C'est mon ami Paul.</span><span class="arrow">→</span><span>Questo è il mio amico Paul.</span></div>
+        <div class="example"><span class="fr">C'est beau !</span><span class="arrow">→</span><span>È bello! (aggettivo → sempre <em>c'est</em>)</span></div>
+        <div class="example"><span class="fr">Ce sont des étudiants.</span><span class="arrow">→</span><span>Sono studenti.</span></div>
+        <div class="example"><span class="fr">Ce sont mes amis.</span><span class="arrow">→</span><span>Questi sono i miei amici.</span></div>
+        <div class="tip">
+          💡 <strong>Da ricordare:</strong> Con un aggettivo solo (<em>c'est bon, c'est vrai…</em>), si usa sempre <em>c'est</em>, mai <em>ce sont</em>.
+        </div>
+      `
+    },
+
+    ar: {
+      title: "C'est مقابل Ce sont",
+      sub: "كيف تقول «هو/هي» و«هم/هن» بالفرنسية",
+      body: `
+        <p style="direction:rtl; text-align:right;">هاتان العبارتان تعادلان في العربية «هو / هي» و«هم / هن». الاختيار بينهما يعتمد فقط على عدد الاسم الذي يليهما: <strong>مفرد أو جمع</strong>.</p>
+        <div class="two-col">
+          <div class="col-box" style="direction:rtl; text-align:right;">
+            <h3><span class="hl">C'est</span> = مفرد</h3>
+            <p style="font-size:.95rem;">قبل اسم مفرد أو اسم علم أو ضمير.</p>
+          </div>
+          <div class="col-box right" style="direction:rtl; text-align:right;">
+            <h3><span class="hlg">Ce sont</span> = جمع</h3>
+            <p style="font-size:.95rem;">قبل اسم في صيغة الجمع.</p>
+          </div>
+        </div>
+        <div class="divider">· · ·</div>
+        <p style="direction:rtl; text-align:right;"><strong>أمثلة:</strong></p>
+        <div class="example" style="flex-direction:row-reverse;">
+          <span class="fr">C'est un livre.</span><span class="arrow">←</span><span style="direction:rtl;">إنه كتاب.</span>
+        </div>
+        <div class="example" style="flex-direction:row-reverse;">
+          <span class="fr">C'est mon ami Paul.</span><span class="arrow">←</span><span style="direction:rtl;">هذا صديقي بول.</span>
+        </div>
+        <div class="example" style="flex-direction:row-reverse;">
+          <span class="fr">C'est beau !</span><span class="arrow">←</span><span style="direction:rtl;">إنه جميل! (صفة → دائماً <em>c'est</em>)</span>
+        </div>
+        <div class="example" style="flex-direction:row-reverse;">
+          <span class="fr">Ce sont des étudiants.</span><span class="arrow">←</span><span style="direction:rtl;">هم طلاب.</span>
+        </div>
+        <div class="example" style="flex-direction:row-reverse;">
+          <span class="fr">Ce sont mes amis.</span><span class="arrow">←</span><span style="direction:rtl;">هؤلاء أصدقائي.</span>
+        </div>
+        <div class="tip" style="direction:rtl; text-align:right;">
+          💡 <strong>للتذكر:</strong> مع الصفة المنفردة (<em>c'est bon, c'est vrai…</em>) نستخدم دائماً <em>c'est</em>، لا <em>ce sont</em> أبداً.
+        </div>
+      `
+    },
+
+    zh: {
+      title: "C'est 与 Ce sont",
+      sub: "法语中如何说「这是」和「这些是」",
+      body: `
+        <p>这两个表达相当于中文的「这是」和「这些是」。选择哪个，只取决于后面名词的<strong>单复数</strong>。</p>
+        <div class="two-col">
+          <div class="col-box">
+            <h3><span class="hl">C'est</span> = 单数</h3>
+            <p style="font-size:.95rem;">用于单数名词、专有名词或代词之前。</p>
+          </div>
+          <div class="col-box right">
+            <h3><span class="hlg">Ce sont</span> = 复数</h3>
+            <p style="font-size:.95rem;">用于复数名词之前。</p>
+          </div>
+        </div>
+        <div class="divider">· · ·</div>
+        <p><strong>例句：</strong></p>
+        <div class="example"><span class="fr">C'est un livre.</span><span class="arrow">→</span><span>这是一本书。</span></div>
+        <div class="example"><span class="fr">C'est mon ami Paul.</span><span class="arrow">→</span><span>这是我的朋友保罗。</span></div>
+        <div class="example"><span class="fr">C'est beau !</span><span class="arrow">→</span><span>真美！（形容词 → 永远用 <em>c'est</em>）</span></div>
+        <div class="example"><span class="fr">Ce sont des étudiants.</span><span class="arrow">→</span><span>他们是学生。</span></div>
+        <div class="example"><span class="fr">Ce sont mes amis.</span><span class="arrow">→</span><span>这些是我的朋友们。</span></div>
+        <div class="tip">
+          💡 <strong>要记住：</strong>单独跟形容词时（<em>c'est bon, c'est vrai…</em>），永远用 <em>c'est</em>，绝不用 <em>ce sont</em>。
+        </div>
+      `
+    }
+  };
+
+  function showExplanation() {
+    if (!selectedLang) return;
+    const c = content[selectedLang];
+    const s2 = document.getElementById('screen2');
+
+    s2.innerHTML = `
+      <div class="ornament">✦ ✦ ✦</div>
+      <h1>${c.title}</h1>
+      <p class="subtitle">${c.sub}</p>
+      ${c.body}
+      <div>
+        <button class="btn-back" onclick="goBack()">← Revenir / Go back</button>
+        <a class="home-link" href="index.html">⌂ Accueil</a>
+      </div>
+    `;
+
+    document.getElementById('screen1').classList.add('hidden');
+    s2.classList.remove('hidden');
+    s2.classList.remove('screen');
+    void s2.offsetWidth;
+    s2.classList.add('screen');
+  }
+
+  function goBack() {
+    document.getElementById('screen2').classList.add('hidden');
+    document.getElementById('screen1').classList.remove('hidden');
+    const s1 = document.getElementById('screen1');
+    s1.classList.remove('screen');
+    void s1.offsetWidth;
+    s1.classList.add('screen');
+  }
+</script>
+</body>
+</html>
