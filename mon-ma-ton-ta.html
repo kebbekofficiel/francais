@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apprendre le francais - Mon/Ma et Ton/Ta</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:    #1a1208;
+      --cream:  #f5f0e8;
+      --gold:   #c8922a;
+      --rust:   #8b3a1a;
+      --pale:   #ede8dc;
+      --blue:   #2a5c8b;
+      --green:  #3a6b4a;
+      --purple: #6b3a8b;
+    }
+
+    body {
+      background-color: var(--cream);
+      color: var(--ink);
+      font-family: 'Crimson Pro', Georgia, serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background-image:
+        radial-gradient(ellipse at 20% 10%, rgba(200,146,42,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 90%, rgba(139,58,26,0.07) 0%, transparent 55%);
+    }
+
+    .card {
+      background: var(--cream);
+      border: 1px solid rgba(200,146,42,0.35);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08), 0 12px 40px rgba(0,0,0,0.10);
+      max-width: 660px;
+      width: 100%;
+      padding: 3.5rem 3rem;
+      position: relative;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--rust), var(--gold), var(--rust));
+    }
+
+    .ornament {
+      text-align: center;
+      color: var(--gold);
+      letter-spacing: .5rem;
+      margin-bottom: 1.6rem;
+      font-size: 1.2rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 700;
+      line-height: 1.2;
+      text-align: center;
+      margin-bottom: .5rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--rust);
+      margin-bottom: 2.4rem;
+    }
+
+    .screen { animation: fadeIn .5s ease both; }
+    .hidden { display: none !important; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* grille langues */
+    .lang-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .85rem;
+      margin-top: 1.8rem;
+    }
+
+    .lang-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .35rem;
+      padding: .9rem .6rem;
+      border: 1.5px solid rgba(200,146,42,0.3);
+      background: transparent;
+      cursor: pointer;
+      font-family: 'Crimson Pro', serif;
+      color: var(--ink);
+      transition: all .2s ease;
+    }
+
+    .lang-flag {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--rust);
+      font-family: 'Playfair Display', serif;
+    }
+
+    .lang-name { font-size: .95rem; }
+
+    .lang-btn:hover,
+    .lang-btn.selected {
+      border-color: var(--gold);
+      background: rgba(200,146,42,0.10);
+      color: var(--rust);
+    }
+
+    .btn-continue {
+      display: block;
+      width: 100%;
+      margin-top: 2rem;
+      padding: 1rem 1.5rem;
+      background: var(--ink);
+      color: var(--cream);
+      border: none;
+      cursor: pointer;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      letter-spacing: .06em;
+      transition: background .2s, transform .15s;
+    }
+    .btn-continue:hover { background: var(--rust); transform: translateY(-1px); }
+    .btn-continue:disabled { opacity: .35; cursor: default; transform: none; background: var(--ink); }
+
+    /* ── contenu explication ── */
+    p { line-height: 1.75; font-size: 1.05rem; margin-bottom: .8rem; }
+
+    /* tableau 3 colonnes */
+    .three-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: .7rem;
+      margin: 1.4rem 0;
+    }
+
+    .col-box {
+      background: var(--pale);
+      padding: .9rem 1rem;
+      border-top: 3px solid var(--gold);
+    }
+    .col-box.masc  { border-top-color: var(--blue); }
+    .col-box.fem   { border-top-color: var(--rust); }
+    .col-box.femv  { border-top-color: var(--purple); }
+
+    .col-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      margin-bottom: .4rem;
+    }
+
+    .col-box p { font-size: .9rem; margin-bottom: 0; }
+
+    /* tableau 2 colonnes */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .7rem;
+      margin: 1.4rem 0;
+    }
+
+    /* tableau exemples */
+    .ex-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 1rem;
+    }
+
+    .ex-table th {
+      font-family: 'Playfair Display', serif;
+      font-size: .85rem;
+      font-weight: 700;
+      text-align: left;
+      padding: .5rem .7rem;
+      background: var(--pale);
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .ex-table td {
+      padding: .45rem .7rem;
+      border-bottom: 1px solid rgba(200,146,42,0.15);
+      vertical-align: top;
+    }
+
+    .ex-table tr:last-child td { border-bottom: none; }
+
+    .ex-table .fr {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: var(--rust);
+      font-size: 1.1rem;
+    }
+
+    .ex-table .label {
+      font-size: .82rem;
+      color: #777;
+      font-style: italic;
+    }
+
+    /* alerte exception */
+    .alert {
+      background: rgba(107,58,139,0.08);
+      border: 1.5px solid rgba(107,58,139,0.3);
+      border-left: 4px solid var(--purple);
+      padding: 1rem 1.2rem;
+      margin: 1.4rem 0;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .alert strong { color: var(--purple); }
+
+    .tip {
+      border: 1px dashed rgba(200,146,42,0.4);
+      padding: 1rem 1.2rem;
+      font-size: .98rem;
+      font-style: italic;
+      color: #555;
+      margin-top: 1.2rem;
+      line-height: 1.6;
+    }
+
+    .divider {
+      text-align: center;
+      color: var(--gold);
+      letter-spacing: .4rem;
+      font-size: .8rem;
+      margin: 1.4rem 0;
+      opacity: .6;
+    }
+
+    .hl  { color: var(--rust); font-weight: 600; }
+    .hlb { color: var(--blue); font-weight: 600; }
+    .hlp { color: var(--purple); font-weight: 600; }
+
+    .btn-back {
+      background: transparent;
+      border: 1px solid rgba(0,0,0,0.2);
+      color: #777;
+      font-family: 'Crimson Pro', serif;
+      font-size: .95rem;
+      cursor: pointer;
+      padding: .5rem 1rem;
+      margin-top: 1.8rem;
+      transition: color .2s, border-color .2s;
+    }
+    .btn-back:hover { color: var(--rust); border-color: var(--rust); }
+
+    .home-link {
+      display: inline-block;
+      margin-top: .6rem;
+      margin-left: .8rem;
+      font-size: .95rem;
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .home-link:hover { text-decoration: underline; }
+
+    @media (max-width: 500px) {
+      .three-col { grid-template-columns: 1fr; }
+      .two-col   { grid-template-columns: 1fr; }
+      .card { padding: 2.5rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <div id="screen1" class="screen">
+    <div class="ornament">* * *</div>
+    <h1>Quelle est votre langue maternelle ?</h1>
+    <p class="subtitle">What is your native language?</p>
+
+    <div class="lang-grid">
+      <button class="lang-btn" data-lang="fr">
+        <span class="lang-flag">FR</span>
+        <span class="lang-name">Fran&#231;ais</span>
+      </button>
+      <button class="lang-btn" data-lang="en">
+        <span class="lang-flag">EN</span>
+        <span class="lang-name">English</span>
+      </button>
+      <button class="lang-btn" data-lang="es">
+        <span class="lang-flag">ES</span>
+        <span class="lang-name">Espa&#241;ol</span>
+      </button>
+      <button class="lang-btn" data-lang="pt">
+        <span class="lang-flag">PT</span>
+        <span class="lang-name">Portugu&#234;s</span>
+      </button>
+      <button class="lang-btn" data-lang="de">
+        <span class="lang-flag">DE</span>
+        <span class="lang-name">Deutsch</span>
+      </button>
+      <button class="lang-btn" data-lang="it">
+        <span class="lang-flag">IT</span>
+        <span class="lang-name">Italiano</span>
+      </button>
+      <button class="lang-btn" data-lang="ar">
+        <span class="lang-flag">AR</span>
+        <span class="lang-name">&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</span>
+      </button>
+      <button class="lang-btn" data-lang="zh">
+        <span class="lang-flag">ZH</span>
+        <span class="lang-name">&#20013;&#25991;</span>
+      </button>
+    </div>
+
+    <button class="btn-continue" id="btnContinue" disabled>
+      Continuer &#8594;
+    </button>
+  </div>
+
+  <div id="screen2" class="screen hidden"></div>
+
+</div>
+
+<script>
+var selectedLang = null;
+
+var data = {
+
+  fr: {
+    title: "Mon / Ma &nbsp;&mdash;&nbsp; Ton / Ta",
+    sub: "Les adjectifs possessifs de la 1re et 2e personne du singulier",
+    rtl: false,
+    intro: "En fran&#231;ais, l'adjectif possessif s'accorde avec le nom qu'il accompagne, et non avec le possesseur. La r&#232;gle principale d&#233;pend du <strong>genre</strong> (masculin ou f&#233;minin) et du <strong>son initial</strong> du mot qui suit.",
+    boxes: [
+      { cls: "masc",  t: "<span class='hlb'>Mon</span> / <span class='hlb'>Ton</span>", d: "Devant un nom <strong>masculin</strong> singulier." },
+      { cls: "fem",   t: "<span class='hl'>Ma</span> / <span class='hl'>Ta</span>",   d: "Devant un nom <strong>f&#233;minin</strong> singulier commen&#231;ant par une <strong>consonne</strong>." },
+      { cls: "femv",  t: "<span class='hlp'>Mon</span> / <span class='hlp'>Ton</span>", d: "Devant un nom <strong>f&#233;minin</strong> singulier commen&#231;ant par une <strong>voyelle ou un h muet</strong>." }
+    ],
+    alertTitle: "L'exception importante",
+    alert: "Devant un nom f&#233;minin commen&#231;ant par une <span class='hlp'>voyelle</span> (a, e, i, o, u) ou un <span class='hlp'>h muet</span>, on utilise <span class='hlp'><strong>mon</strong></span> et <span class='hlp'><strong>ton</strong></span> &#8212; m&#234;me si le nom est f&#233;minin. C'est pour &#233;viter la rencontre de deux sons vocaliques qui rend la prononciation difficile.",
+    tableHead: ["Nom", "Genre", "Commence par", "1re pers.", "2e pers."],
+    rows: [
+      ["livre", "masculin", "consonne", "mon livre", "ton livre", ""],
+      ["stylo", "masculin", "consonne", "mon stylo", "ton stylo", ""],
+      ["ami", "masculin", "voyelle", "mon ami", "ton ami", ""],
+      ["maison", "f&#233;minin", "consonne", "ma maison", "ta maison", ""],
+      ["chaise", "f&#233;minin", "consonne", "ma chaise", "ta chaise", ""],
+      ["amie", "f&#233;minin", "voyelle &#9733;", "mon amie", "ton amie", "exception"],
+      ["&#233;cole", "f&#233;minin", "voyelle &#9733;", "mon &#233;cole", "ton &#233;cole", "exception"],
+      ["histoire", "f&#233;minin", "h muet &#9733;", "mon histoire", "ton histoire", "exception"]
+    ],
+    tip: "Astuce : si vous h&#233;sitez, prononcez la phrase &#224; voix haute. Si deux sons vocaliques se heurtent (ma amie), c'est le signe qu'il faut utiliser <em>mon / ton</em>."
+  },
+
+  en: {
+    title: "Mon / Ma &nbsp;&mdash;&nbsp; Ton / Ta",
+    sub: "Possessive adjectives for the 1st and 2nd person singular",
+    rtl: false,
+    intro: "In French, the possessive adjective agrees with the <strong>noun it describes</strong>, not with the speaker. The choice depends on the noun's <strong>gender</strong> (masculine or feminine) and the <strong>first sound</strong> of the following word.",
+    boxes: [
+      { cls: "masc",  t: "<span class='hlb'>Mon</span> / <span class='hlb'>Ton</span>", d: "Before a <strong>masculine</strong> singular noun." },
+      { cls: "fem",   t: "<span class='hl'>Ma</span> / <span class='hl'>Ta</span>",   d: "Before a <strong>feminine</strong> singular noun starting with a <strong>consonant</strong>." },
+      { cls: "femv",  t: "<span class='hlp'>Mon</span> / <span class='hlp'>Ton</span>", d: "Before a <strong>feminine</strong> singular noun starting with a <strong>vowel or silent h</strong>." }
+    ],
+    alertTitle: "The key exception",
+    alert: "Before a feminine noun starting with a <span class='hlp'>vowel</span> (a, e, i, o, u) or a <span class='hlp'>silent h</span>, French uses <span class='hlp'><strong>mon</strong></span> and <span class='hlp'><strong>ton</strong></span> &#8212; even though the noun is feminine. This avoids an awkward clash of two vowel sounds (saying <em>ma amie</em> is a mouthful in French).",
+    tableHead: ["Noun", "Gender", "Starts with", "1st pers.", "2nd pers."],
+    rows: [
+      ["livre (book)", "masc.", "consonant", "mon livre", "ton livre", ""],
+      ["stylo (pen)", "masc.", "consonant", "mon stylo", "ton stylo", ""],
+      ["ami (male friend)", "masc.", "vowel", "mon ami", "ton ami", ""],
+      ["maison (house)", "fem.", "consonant", "ma maison", "ta maison", ""],
+      ["chaise (chair)", "fem.", "consonant", "ma chaise", "ta chaise", ""],
+      ["amie (female friend)", "fem.", "vowel &#9733;", "mon amie", "ton amie", "exception!"],
+      ["&#233;cole (school)", "fem.", "vowel &#9733;", "mon &#233;cole", "ton &#233;cole", "exception!"],
+      ["histoire (story)", "fem.", "silent h &#9733;", "mon histoire", "ton histoire", "exception!"]
+    ],
+    tip: "Tip: say the phrase out loud. If two vowel sounds collide (like in <em>ma amie</em>), that is your signal to switch to <em>mon / ton</em>."
+  },
+
+  es: {
+    title: "Mon / Ma &nbsp;&mdash;&nbsp; Ton / Ta",
+    sub: "Los adjetivos posesivos en franc&#233;s &#8212; 1ra y 2da persona del singular",
+    rtl: false,
+    intro: "En franc&#233;s, el adjetivo posesivo concuerda con el <strong>sustantivo que acompa&#241;a</strong>, no con el poseedor. La elecci&#243;n depende del <strong>g&#233;nero</strong> del sustantivo (masculino o femenino) y del <strong>sonido inicial</strong> de la palabra que sigue.",
+    boxes: [
+      { cls: "masc",  t: "<span class='hlb'>Mon</span> / <span class='hlb'>Ton</span>", d: "Ante un sustantivo <strong>masculino</strong> singular." },
+      { cls: "fem",   t: "<span class='hl'>Ma</span> / <span class='hl'>Ta</span>",   d: "Ante un sustantivo <strong>femenino</strong> singular que comienza con <strong>consonante</strong>." },
+      { cls: "femv",  t: "<span class='hlp'>Mon</span> / <span class='hlp'>Ton</span>", d: "Ante un sustantivo <strong>femenino</strong> singular que comienza con <strong>vocal o h muda</strong>." }
+    ],
+    alertTitle: "La excepci&#243;n importante",
+    alert: "Ante un sustantivo femenino que comienza con <span class='hlp'>vocal</span> (a, e, i, o, u) o <span class='hlp'>h muda</span>, se usa <span class='hlp'><strong>mon</strong></span> y <span class='hlp'><strong>ton</strong></span> &#8212; aunque el sustantivo sea femenino. Esto evita el choque de dos sonidos voc&#225;licos (*ma amie resulta inc&#243;modo de pronunciar).",
+    tableHead: ["Sustantivo", "G&#233;nero", "Comienza con", "1ra pers.", "2da pers."],
+    rows: [
+      ["livre (libro)", "masc.", "consonante", "mon livre", "ton livre", ""],
+      ["stylo (boli)", "masc.", "consonante", "mon stylo", "ton stylo", ""],
+      ["ami (amigo)", "masc.", "vocal", "mon ami", "ton ami", ""],
+      ["maison (casa)", "fem.", "consonante", "ma maison", "ta maison", ""],
+      ["chaise (silla)", "fem.", "consonante", "ma chaise", "ta chaise", ""],
+      ["amie (amiga)", "fem.", "vocal &#9733;", "mon amie", "ton amie", "excepci&#243;n"],
+      ["&#233;cole (escuela)", "fem.", "vocal &#9733;", "mon &#233;cole", "ton &#233;cole", "excepci&#243;n"],
+      ["histoire (historia)", "fem.", "h muda &#9733;", "mon histoire", "ton histoire", "excepci&#243;n"]
+    ],
+    tip: "Truco: prueba pronunciar la frase en voz alta. Si dos sonidos voc&#225;licos chocan (como en <em>ma amie</em>), esa es la se&#241;al para usar <em>mon / ton</em>."
+  },
+
+  pt: {
+    title: "Mon / Ma &nbsp;&mdash;&nbsp; Ton / Ta",
+    sub: "Os adjetivos possessivos em franc&#234;s &#8212; 1&#170; e 2&#170; pessoa do singular",
+    rtl: false,
+    intro: "Em franc&#234;s, o adjetivo possessivo concorda com o <strong>substantivo que acompanha</strong>, n&#227;o com o possuidor. A escolha depende do <strong>g&#234;nero</strong> do substantivo (masculino ou feminino) e do <strong>som inicial</strong> da palavra seguinte.",
+    boxes: [
+      { cls: "masc",  t: "<span class='hlb'>Mon</span> / <span class='hlb'>Ton</span>", d: "Antes de um substantivo <strong>masculino</strong> singular." },
+      { cls: "fem",   t: "<span class='hl'>Ma</span> / <span class='hl'>Ta</span>",   d: "Antes de um substantivo <strong>feminino</strong> singular come&#231;ando por <strong>consoante</strong>." },
+      { cls: "femv",  t: "<span class='hlp'>Mon</span> / <span class='hlp'>Ton</span>", d: "Antes de um substantivo <strong>feminino</strong> singular come&#231;ando por <strong>vogal ou h mudo</strong>." }
+    ],
+    alertTitle: "A exce&#231;&#227;o importante",
+    alert: "Antes de um substantivo feminino come&#231;ando por <span class='hlp'>vogal</span> (a, e, i, o, u) ou <span class='hlp'>h mudo</span>, usa-se <span class='hlp'><strong>mon</strong></span> e <span class='hlp'><strong>ton</strong></span> &#8212; mesmo sendo o substantivo feminino. Isso evita o choque de dois sons voc&#225;licos (*ma amie &#233; dif&#237;cil de pronunciar).",
+    tableHead: ["Substantivo", "G&#234;nero", "Come&#231;a com", "1&#170; pes.", "2&#170; pes."],
+    rows: [
+      ["livre (livro)", "masc.", "consoante", "mon livre", "ton livre", ""],
+      ["stylo (caneta)", "masc.", "consoante", "mon stylo", "ton stylo", ""],
+      ["ami (amigo)", "masc.", "vogal", "mon ami", "ton ami", ""],
+      ["maison (casa)", "fem.", "consoante", "ma maison", "ta maison", ""],
+      ["chaise (cadeira)", "fem.", "consoante", "ma chaise", "ta chaise", ""],
+      ["amie (amiga)", "fem.", "vogal &#9733;", "mon amie", "ton amie", "exce&#231;&#227;o"],
+      ["&#233;cole (escola)", "fem.", "vogal &#9733;", "mon &#233;cole", "ton &#233;cole", "exce&#231;&#227;o"],
+      ["histoire (hist&#243;ria)", "fem.", "h mudo &#9733;", "mon histoire", "ton histoire", "exce&#231;&#227;o"]
+    ],
+    tip: "Dica: diga a frase em voz alta. Se dois sons voc&#225;licos se chocam (como em <em>ma amie</em>), esse &#233; o sinal para usar <em>mon / ton</em>."
+  },
+
+  de: {
+    title: "Mon / Ma &nbsp;&mdash;&nbsp; Ton / Ta",
+    sub: "Possessivbegleiter im Franz&#246;sischen &#8212; 1. und 2. Person Singular",
+    rtl: false,
+    intro: "Im Franz&#246;sischen richtet sich der Possessivbegleiter nach dem <strong>begleiteten Nomen</strong>, nicht nach dem Besitzer. Die Wahl h&#228;ngt vom <strong>Genus</strong> (maskulin oder feminin) und vom <strong>Anlaut</strong> des folgenden Wortes ab.",
+    boxes: [
+      { cls: "masc",  t: "<span class='hlb'>Mon</span> / <span class='hlb'>Ton</span>", d: "Vor einem <strong>maskulinen</strong> Nomen im Singular." },
+      { cls: "fem",   t: "<span class='hl'>Ma</span> / <span class='hl'>Ta</span>",   d: "Vor einem <strong>femininen</strong> Nomen im Singular, das mit einem <strong>Konsonanten</strong> beginnt." },
+      { cls: "femv",  t: "<span class='hlp'>Mon</span> / <span class='hlp'>Ton</span>", d: "Vor einem <strong>femininen</strong> Nomen im Singular, das mit einem <strong>Vokal oder stummen h</strong> beginnt." }
+    ],
+    alertTitle: "Die wichtige Ausnahme",
+    alert: "Vor einem femininen Nomen, das mit einem <span class='hlp'>Vokal</span> (a, e, i, o, u) oder einem <span class='hlp'>stummen h</span> beginnt, verwendet man <span class='hlp'><strong>mon</strong></span> und <span class='hlp'><strong>ton</strong></span> &#8212; auch wenn das Nomen feminin ist. Dies vermeidet den Zusammensto&#223; zweier Vokalkl&#228;nge (*ma amie w&#228;re schwer auszusprechen).",
+    tableHead: ["Nomen", "Genus", "Beginnt mit", "1. Pers.", "2. Pers."],
+    rows: [
+      ["livre (Buch)", "mask.", "Konsonant", "mon livre", "ton livre", ""],
+      ["stylo (Stift)", "mask.", "Konsonant", "mon stylo", "ton stylo", ""],
+      ["ami (Freund)", "mask.", "Vokal", "mon ami", "ton ami", ""],
+      ["maison (Haus)", "fem.", "Konsonant", "ma maison", "ta maison", ""],
+      ["chaise (Stuhl)", "fem.", "Konsonant", "ma chaise", "ta chaise", ""],
+      ["amie (Freundin)", "fem.", "Vokal &#9733;", "mon amie", "ton amie", "Ausnahme"],
+      ["&#233;cole (Schule)", "fem.", "Vokal &#9733;", "mon &#233;cole", "ton &#233;cole", "Ausnahme"],
+      ["histoire (Geschichte)", "fem.", "stummes h &#9733;", "mon histoire", "ton histoire", "Ausnahme"]
+    ],
+    tip: "Tipp: Sprechen Sie den Satz laut. Wenn zwei Vokalkl&#228;nge aufeinandertreffen (wie in <em>ma amie</em>), ist das das Zeichen f&#252;r <em>mon / ton</em>."
+  },
+
+  it: {
+    title: "Mon / Ma &nbsp;&mdash;&nbsp; Ton / Ta",
+    sub: "Gli aggettivi possessivi in francese &#8212; 1&#170; e 2&#170; persona singolare",
+    rtl: false,
+    intro: "In francese, l'aggettivo possessivo concorda con il <strong>sostantivo che accompagna</strong>, non con il possessore. La scelta dipende dal <strong>genere</strong> del sostantivo (maschile o femminile) e dal <strong>suono iniziale</strong> della parola seguente.",
+    boxes: [
+      { cls: "masc",  t: "<span class='hlb'>Mon</span> / <span class='hlb'>Ton</span>", d: "Davanti a un sostantivo <strong>maschile</strong> singolare." },
+      { cls: "fem",   t: "<span class='hl'>Ma</span> / <span class='hl'>Ta</span>",   d: "Davanti a un sostantivo <strong>femminile</strong> singolare che inizia con una <strong>consonante</strong>." },
+      { cls: "femv",  t: "<span class='hlp'>Mon</span> / <span class='hlp'>Ton</span>", d: "Davanti a un sostantivo <strong>femminile</strong> singolare che inizia con una <strong>vocale o h muta</strong>." }
+    ],
+    alertTitle: "L'eccezione importante",
+    alert: "Davanti a un sostantivo femminile che inizia con una <span class='hlp'>vocale</span> (a, e, i, o, u) o una <span class='hlp'>h muta</span>, si usa <span class='hlp'><strong>mon</strong></span> e <span class='hlp'><strong>ton</strong></span> &#8212; anche se il sostantivo &#232; femminile. Questo evita l'incontro di due suoni vocalici (*ma amie sarebbe difficile da pronunciare).",
+    tableHead: ["Sostantivo", "Genere", "Inizia con", "1&#170; pers.", "2&#170; pers."],
+    rows: [
+      ["livre (libro)", "masch.", "consonante", "mon livre", "ton livre", ""],
+      ["stylo (penna)", "masch.", "consonante", "mon stylo", "ton stylo", ""],
+      ["ami (amico)", "masch.", "vocale", "mon ami", "ton ami", ""],
+      ["maison (casa)", "femm.", "consonante", "ma maison", "ta maison", ""],
+      ["chaise (sedia)", "femm.", "consonante", "ma chaise", "ta chaise", ""],
+      ["amie (amica)", "femm.", "vocale &#9733;", "mon amie", "ton amie", "eccezione"],
+      ["&#233;cole (scuola)", "femm.", "vocale &#9733;", "mon &#233;cole", "ton &#233;cole", "eccezione"],
+      ["histoire (storia)", "femm.", "h muta &#9733;", "mon histoire", "ton histoire", "eccezione"]
+    ],
+    tip: "Suggerimento: pronuncia la frase ad alta voce. Se due suoni vocalici si scontrano (come in <em>ma amie</em>), &#232; il segnale per usare <em>mon / ton</em>."
+  },
+
+  ar: {
+    title: "Mon / Ma &nbsp;&mdash;&nbsp; Ton / Ta",
+    sub: "&#1575;&#1604;&#1589;&#1601;&#1575;&#1578; &#1575;&#1604;&#1605;&#1604;&#1603;&#1610;&#1577; &#1601;&#1610; &#1575;&#1604;&#1601;&#1585;&#1606;&#1587;&#1610;&#1577; &#8212; &#1575;&#1604;&#1605;&#1578;&#1603;&#1604;&#1605; &#1608;&#1575;&#1604;&#1605;&#1582;&#1575;&#1591;&#1576;",
+    rtl: true,
+    intro: "&#1601;&#1610; &#1575;&#1604;&#1601;&#1585;&#1606;&#1587;&#1610;&#1577;&#1548; &#1578;&#1578;&#1591;&#1575;&#1576;&#1602; &#1575;&#1604;&#1589;&#1601;&#1577; &#1575;&#1604;&#1605;&#1604;&#1603;&#1610;&#1577; &#1605;&#1593; <strong>&#1575;&#1604;&#1575;&#1587;&#1605; &#1575;&#1604;&#1605;&#1589;&#1581;&#1608;&#1576;</strong>&#1548; &#1604;&#1610;&#1587; &#1605;&#1593; &#1589;&#1575;&#1581;&#1576; &#1575;&#1604;&#1605;&#1604;&#1603;&#1610;&#1577;. &#1575;&#1604;&#1575;&#1582;&#1578;&#1610;&#1575;&#1585; &#1610;&#1593;&#1578;&#1605;&#1583; &#1593;&#1604;&#1609; <strong>&#1580;&#1606;&#1587; &#1575;&#1604;&#1575;&#1587;&#1605;</strong> (&#1605;&#1584;&#1603;&#1585; &#1571;&#1608; &#1605;&#1572;&#1606;&#1579;) &#1608;&#1593;&#1604;&#1609; <strong>&#1575;&#1604;&#1589;&#1608;&#1578; &#1575;&#1604;&#1571;&#1608;&#1604;</strong> &#1604;&#1604;&#1603;&#1604;&#1605;&#1577; &#1575;&#1604;&#1578;&#1575;&#1604;&#1610;&#1577;.",
+    boxes: [
+      { cls: "masc",  t: "<span class='hlb'>Mon</span> / <span class='hlb'>Ton</span>", d: "&#1571;&#1605;&#1575;&#1605; &#1575;&#1587;&#1605; <strong>&#1605;&#1584;&#1603;&#1585;</strong> &#1605;&#1601;&#1585;&#1583;." },
+      { cls: "fem",   t: "<span class='hl'>Ma</span> / <span class='hl'>Ta</span>",   d: "&#1571;&#1605;&#1575;&#1605; &#1575;&#1587;&#1605; <strong>&#1605;&#1572;&#1606;&#1579;</strong> &#1605;&#1601;&#1585;&#1583; &#1610;&#1576;&#1583;&#1571; &#1576;<strong>&#1581;&#1585;&#1601; &#1587;&#1575;&#1603;&#1606;</strong>." },
+      { cls: "femv",  t: "<span class='hlp'>Mon</span> / <span class='hlp'>Ton</span>", d: "&#1571;&#1605;&#1575;&#1605; &#1575;&#1587;&#1605; <strong>&#1605;&#1572;&#1606;&#1579;</strong> &#1605;&#1601;&#1585;&#1583; &#1610;&#1576;&#1583;&#1571; &#1576;<strong>&#1589;&#1608;&#1578; &#1605;&#1578;&#1581;&#1585;&#1603;</strong> (&#1575;&#1604;&#1604;&#1610;&#1606;)." }
+    ],
+    alertTitle: "&#1575;&#1604;&#1575;&#1587;&#1578;&#1579;&#1606;&#1575;&#1569; &#1575;&#1604;&#1605;&#1607;&#1605;",
+    alert: "&#1571;&#1605;&#1575;&#1605; &#1575;&#1587;&#1605; &#1605;&#1572;&#1606;&#1579; &#1610;&#1576;&#1583;&#1571; &#1576;<span class='hlp'>&#1589;&#1575;&#1574;&#1578;</span> &#1571;&#1608; <span class='hlp'>h &#1589;&#1575;&#1605;&#1578;&#1577;</span>&#1548; &#1606;&#1587;&#1578;&#1582;&#1583;&#1605; <span class='hlp'><strong>mon</strong></span> &#1608;<span class='hlp'><strong>ton</strong></span> &#8212; &#1585;&#1594;&#1605; &#1571;&#1606; &#1575;&#1604;&#1575;&#1587;&#1605; &#1605;&#1572;&#1606;&#1579;. &#1607;&#1584;&#1575; &#1604;&#1578;&#1580;&#1606;&#1576; &#1578;&#1604;&#1575;&#1602;&#1610; &#1589;&#1608;&#1578;&#1610;&#1606; &#1605;&#1578;&#1581;&#1585;&#1603;&#1610;&#1606; &#1605;&#1578;&#1578;&#1575;&#1604;&#1610;&#1610;&#1606;.",
+    tableHead: ["&#1575;&#1604;&#1575;&#1587;&#1605;", "&#1575;&#1604;&#1580;&#1606;&#1587;", "&#1610;&#1576;&#1583;&#1571; &#1576;&#1600;", "&#1575;&#1604;&#1605;&#1578;&#1603;&#1604;&#1605;", "&#1575;&#1604;&#1605;&#1582;&#1575;&#1591;&#1576;"],
+    rows: [
+      ["livre (&#1603;&#1578;&#1575;&#1576;)", "&#1605;&#1584;&#1603;&#1585;", "&#1581;&#1585;&#1601; &#1587;&#1575;&#1603;&#1606;", "mon livre", "ton livre", ""],
+      ["maison (&#1576;&#1610;&#1578;)", "&#1605;&#1572;&#1606;&#1579;", "&#1581;&#1585;&#1601; &#1587;&#1575;&#1603;&#1606;", "ma maison", "ta maison", ""],
+      ["chaise (&#1603;&#1585;&#1587;&#1610;)", "&#1605;&#1572;&#1606;&#1579;", "&#1581;&#1585;&#1601; &#1587;&#1575;&#1603;&#1606;", "ma chaise", "ta chaise", ""],
+      ["amie (&#1589;&#1583;&#1610;&#1602;&#1577;)", "&#1605;&#1572;&#1606;&#1579;", "&#1589;&#1575;&#1574;&#1578; &#9733;", "mon amie", "ton amie", "&#1575;&#1587;&#1578;&#1579;&#1606;&#1575;&#1569;"],
+      ["&#233;cole (&#1605;&#1583;&#1585;&#1587;&#1577;)", "&#1605;&#1572;&#1606;&#1579;", "&#1589;&#1575;&#1574;&#1578; &#9733;", "mon &#233;cole", "ton &#233;cole", "&#1575;&#1587;&#1578;&#1579;&#1606;&#1575;&#1569;"],
+      ["histoire (&#1602;&#1589;&#1577;)", "&#1605;&#1572;&#1606;&#1579;", "h &#1589;&#1575;&#1605;&#1578;&#1577; &#9733;", "mon histoire", "ton histoire", "&#1575;&#1587;&#1578;&#1579;&#1606;&#1575;&#1569;"]
+    ],
+    tip: "&#1606;&#1589;&#1610;&#1581;&#1577;: &#1575;&#1606;&#1591;&#1602; &#1575;&#1604;&#1580;&#1605;&#1604;&#1577; &#1576;&#1589;&#1608;&#1578; &#1593;&#1575;&#1604;. &#1573;&#1584;&#1575; &#1575;&#1604;&#1578;&#1602;&#1609; &#1589;&#1608;&#1578;&#1575;&#1606; &#1605;&#1578;&#1581;&#1585;&#1603;&#1575;&#1606; (&#1605;&#1579;&#1604; ma amie)&#1548; &#1601;&#1607;&#1584;&#1575; &#1605;&#1572;&#1588;&#1585; &#1575;&#1587;&#1578;&#1582;&#1583;&#1575;&#1605; <em>mon / ton</em>."
+  },
+
+  zh: {
+    title: "Mon / Ma &nbsp;&mdash;&nbsp; Ton / Ta",
+    sub: "&#27861;&#35821;&#20851;&#31995;&#24418;&#23481;&#35789; &#8212; &#31532;&#19968;&#20154;&#31281;&#21333;&#25968;&#19982;&#31532;&#20108;&#20154;&#31281;&#21333;&#25968;",
+    rtl: false,
+    intro: "&#22312;&#27861;&#35821;&#20013;&#65292;&#20851;&#31995;&#24418;&#23481;&#35789;&#19982;<strong>&#34900;&#20915;&#30340;&#21517;&#35422;</strong>&#20860;&#35758;&#65292;&#32780;&#19981;&#26159;&#19982;&#25307;&#26377;&#32773;&#20860;&#35758;&#12290;&#36873;&#25321;&#21462;&#20915;&#20110;&#21517;&#35422;&#30340;<strong>&#24615;</strong>&#65288;&#30007;&#24615;&#25110;&#22899;&#24615;&#65289;&#21644;&#21518;&#32512;&#21517;&#35422;&#30340;<strong>&#36215;&#22836;&#35835;&#38899;</strong>&#12290;",
+    boxes: [
+      { cls: "masc",  t: "<span class='hlb'>Mon</span> / <span class='hlb'>Ton</span>", d: "&#29992;&#20110;<strong>&#30007;&#24615;</strong>&#21333;&#25968;&#21517;&#35422;&#20043;&#21069;&#12290;" },
+      { cls: "fem",   t: "<span class='hl'>Ma</span> / <span class='hl'>Ta</span>",   d: "&#29992;&#20110;&#20197;<strong>&#36731;&#38899;</strong>&#24320;&#22836;&#30340;<strong>&#22899;&#24615;</strong>&#21333;&#25968;&#21517;&#35422;&#20043;&#21069;&#12290;" },
+      { cls: "femv",  t: "<span class='hlp'>Mon</span> / <span class='hlp'>Ton</span>", d: "&#29992;&#20110;&#20197;<strong>&#20803;&#38899;&#25110;&#20845;&#38899; h</strong>&#24320;&#22836;&#30340;<strong>&#22899;&#24615;</strong>&#21333;&#25968;&#21517;&#35422;&#20043;&#21069;&#12290;" }
+    ],
+    alertTitle: "&#37325;&#35201;&#20363;&#22806;",
+    alert: "&#22312;&#20197;<span class='hlp'>&#20803;&#38899;</span>&#65288;a, e, i, o, u&#65289;&#25110;<span class='hlp'>&#20845;&#38899; h</span>&#24320;&#22836;&#30340;&#22899;&#24615;&#21517;&#35422;&#20043;&#21069;&#65292;&#20351;&#29992; <span class='hlp'><strong>mon</strong></span> &#21644; <span class='hlp'><strong>ton</strong></span> &#8212; &#21363;&#20351;&#35813;&#21517;&#35422;&#26159;&#22899;&#24615;&#12290;&#36825;&#26159;&#20026;&#20102;&#36991;&#20813;&#20004;&#20010;&#20803;&#38899;&#30456;&#25346;&#65288;*ma amie &#21457;&#38899;&#22374;&#24405;&#65289;&#12290;",
+    tableHead: ["&#21517;&#35422;", "&#24615;", "&#36215;&#22836;", "&#31532;&#19968;&#20154;&#31281;", "&#31532;&#20108;&#20154;&#31281;"],
+    rows: [
+      ["livre (&#20070;)", "&#30007;", "&#36731;&#38899;", "mon livre", "ton livre", ""],
+      ["stylo (&#31508;)", "&#30007;", "&#36731;&#38899;", "mon stylo", "ton stylo", ""],
+      ["ami (&#30007;&#21451;)", "&#30007;", "&#20803;&#38899;", "mon ami", "ton ami", ""],
+      ["maison (&#25151;&#23376;)", "&#22899;", "&#36731;&#38899;", "ma maison", "ta maison", ""],
+      ["chaise (&#26564;&#23376;)", "&#22899;", "&#36731;&#38899;", "ma chaise", "ta chaise", ""],
+      ["amie (&#22899;&#21451;)", "&#22899;", "&#20803;&#38899; &#9733;", "mon amie", "ton amie", "&#20363;&#22806;"],
+      ["&#233;cole (&#23398;&#26657;)", "&#22899;", "&#20803;&#38899; &#9733;", "mon &#233;cole", "ton &#233;cole", "&#20363;&#22806;"],
+      ["histoire (&#25925;&#20107;)", "&#22899;", "&#20845;&#38899; h &#9733;", "mon histoire", "ton histoire", "&#20363;&#22806;"]
+    ],
+    tip: "&#23567;&#25321;&#31062;&#65306;&#22823;&#22768;&#35828;&#20986;&#21477;&#23376;&#12290;&#22914;&#26524;&#20004;&#20010;&#20803;&#38899;&#30456;&#25346;&#65288;&#22914; ma amie&#65289;&#65292;&#35785;&#35813;&#25362;&#25442;&#20026; mon / ton&#12290;"
+  }
+};
+
+function buildPage(lang) {
+  var d = data[lang];
+  var dir  = d.rtl ? 'direction:rtl;text-align:right;' : '';
+
+  // boites 3 colonnes
+  var boxHtml = '<div class="three-col">';
+  for (var b = 0; b < d.boxes.length; b++) {
+    boxHtml += '<div class="col-box ' + d.boxes[b].cls + '" style="' + dir + '">'
+      + '<h3>' + d.boxes[b].t + '</h3>'
+      + '<p>' + d.boxes[b].d + '</p>'
+      + '</div>';
+  }
+  boxHtml += '</div>';
+
+  // tableau
+  var colCount = d.rows[0].length;
+  var showNote = colCount > 5;
+  var thHtml = '';
+  for (var h = 0; h < d.tableHead.length; h++) {
+    thHtml += '<th>' + d.tableHead[h] + '</th>';
+  }
+  if (showNote) thHtml += '<th></th>';
+
+  var trHtml = '';
+  for (var r = 0; r < d.rows.length; r++) {
+    var row = d.rows[r];
+    var isEx = row[5] && row[5] !== '';
+    var rowStyle = isEx ? 'background:rgba(107,58,139,0.06);' : '';
+    trHtml += '<tr style="' + rowStyle + '">';
+    trHtml += '<td class="fr">' + row[0] + '</td>';
+    for (var c = 1; c < 5; c++) {
+      trHtml += '<td>' + row[c] + '</td>';
+    }
+    if (showNote) {
+      trHtml += '<td><span style="color:var(--purple);font-size:.82rem;">' + (row[5] || '') + '</span></td>';
+    }
+    trHtml += '</tr>';
+  }
+
+  var tableHtml = '<table class="ex-table" style="' + dir + '">'
+    + '<thead><tr>' + thHtml + '</tr></thead>'
+    + '<tbody>' + trHtml + '</tbody>'
+    + '</table>';
+
+  return '<div class="ornament">* * *</div>'
+    + '<h1>' + d.title + '</h1>'
+    + '<p class="subtitle">' + d.sub + '</p>'
+    + '<p style="' + dir + '">' + d.intro + '</p>'
+    + boxHtml
+    + '<div class="alert" style="' + dir + '"><strong>&#9733; ' + d.alertTitle + '</strong><br><br>' + d.alert + '</div>'
+    + '<div class="divider">&#183; &#183; &#183;</div>'
+    + tableHtml
+    + '<div class="tip" style="' + dir + '">&#128161; ' + d.tip + '</div>'
+    + '<div style="margin-top:1.8rem;">'
+    + '<button class="btn-back" id="btnBack">&#8592; Revenir / Go back</button>'
+    + '<a class="home-link" href="index.html">&#8962; Accueil</a>'
+    + '</div>';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var buttons = document.querySelectorAll('.lang-btn');
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('click', function() {
+      document.querySelectorAll('.lang-btn').forEach(function(b) {
+        b.classList.remove('selected');
+      });
+      this.classList.add('selected');
+      selectedLang = this.getAttribute('data-lang');
+      document.getElementById('btnContinue').disabled = false;
+    });
+  }
+
+  document.getElementById('btnContinue').addEventListener('click', function() {
+    if (!selectedLang) return;
+    var s1 = document.getElementById('screen1');
+    var s2 = document.getElementById('screen2');
+    s2.innerHTML = buildPage(selectedLang);
+    s1.classList.add('hidden');
+    s2.classList.remove('hidden');
+
+    document.getElementById('btnBack').addEventListener('click', function() {
+      s2.classList.add('hidden');
+      s1.classList.remove('hidden');
+    });
+  });
+});
+</script>
+</body>
+</html>
