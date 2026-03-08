@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apprendre le français · Keb & Bek</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,400&family=Petit+Formal+Script&family=Josefin+Sans:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0e0e0f;
+      --surface:  #17171a;
+      --border:   rgba(255,255,255,0.07);
+      --gold:     #c9a84c;
+      --gold-lt:  #e8cg80;
+      --text:     #e8e2d6;
+      --muted:    #888070;
+      --accent:   #7a9e7e;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: .4;
+    }
+
+    /* ── HERO ── */
+    header {
+      position: relative;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -120px; left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(ellipse, rgba(201,168,76,0.08) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .site-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: .72rem;
+      letter-spacing: .35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.6rem;
+      animation: fadeUp .8s ease both;
+    }
+
+    h1 {
+      font-family: 'Petit Formal Script', cursive;
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.1;
+      animation: fadeUp .8s .15s ease both;
+    }
+
+    .tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--muted);
+      margin-top: 1rem;
+      animation: fadeUp .8s .3s ease both;
+    }
+
+    .header-rule {
+      width: 60px;
+      height: 1px;
+      background: var(--gold);
+      margin: 2rem auto 0;
+      opacity: .5;
+      animation: fadeUp .8s .4s ease both;
+    }
+
+    /* ── MAIN CONTENT ── */
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── SECTION TITLE ── */
+    .section-label {
+      font-size: .68rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── NOTION GRID ── */
+    .notions {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-bottom: 4rem;
+    }
+
+    .notion-card {
+      background: var(--surface);
+      padding: 2rem 1.8rem;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+      position: relative;
+      overflow: hidden;
+      transition: background .25s;
+      animation: fadeUp .6s ease both;
+    }
+
+    .notion-card:nth-child(1) { animation-delay: .1s; }
+    .notion-card:nth-child(2) { animation-delay: .2s; }
+    .notion-card:nth-child(3) { animation-delay: .3s; }
+    .notion-card:nth-child(4) { animation-delay: .4s; }
+    .notion-card:nth-child(5) { animation-delay: .5s; }
+    .notion-card:nth-child(6) { animation-delay: .6s; }
+
+    .notion-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .3s ease;
+    }
+
+    .notion-card:hover { background: #1e1e22; }
+    .notion-card:hover::before { transform: scaleX(1); }
+
+    .notion-num {
+      font-size: .65rem;
+      letter-spacing: .2em;
+      color: var(--gold);
+      opacity: .7;
+    }
+
+    .notion-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .notion-desc {
+      font-size: .82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .notion-tag {
+      display: inline-block;
+      margin-top: auto;
+      padding-top: .8rem;
+      font-size: .68rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* ── COMING SOON ── */
+    .notion-card.soon {
+      opacity: .4;
+      pointer-events: none;
+      cursor: default;
+    }
+
+    .notion-card.soon .notion-tag { color: var(--muted); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2.5rem;
+      border-top: 1px solid var(--border);
+      font-size: .75rem;
+      letter-spacing: .1em;
+      color: var(--muted);
+      position: relative;
+      z-index: 1;
+    }
+
+    footer span { color: var(--gold); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <p class="site-label">Keb &amp; Bek · Ressources pédagogiques</p>
+  <h1>Le français</h1>
+  <p class="tagline">Notions de grammaire expliquées dans votre langue maternelle</p>
+  <div class="header-rule"></div>
+</header>
+
+<main>
+  <p class="section-label">Notions disponibles</p>
+
+  <div class="notions">
+
+    <!-- ① DISPONIBLE -->
+    <a class="notion-card" href="imperatif.html">
+      <span class="notion-num">01</span>
+      <span class="notion-title">L'impératif présent</span>
+      <span class="notion-desc">2<sup>e</sup> personne du singulier — verbes du 1<sup>er</sup> groupe (<em>regarder</em>)</span>
+      <span class="notion-tag">→ Disponible</span>
+    </a>
+
+    <!-- À VENIR -->
+    <div class="notion-card soon">
+      <span class="notion-num">02</span>
+      <span class="notion-title">Le passé composé</span>
+      <span class="notion-desc">Formation avec <em>avoir</em> et <em>être</em> — participes passés</span>
+      <span class="notion-tag">À venir</span>
+    </div>
+
+    <div class="notion-card soon">
+      <span class="notion-num">03</span>
+      <span class="notion-title">Le subjonctif présent</span>
+      <span class="notion-desc">Formation et emplois principaux</span>
+      <span class="notion-tag">À venir</span>
+    </div>
+
+    <div class="notion-card soon">
+      <span class="notion-num">04</span>
+      <span class="notion-title">Les articles</span>
+      <span class="notion-desc">Définis, indéfinis et partitifs — comment choisir ?</span>
+      <span class="notion-tag">À venir</span>
+    </div>
+
+    <div class="notion-card soon">
+      <span class="notion-num">05</span>
+      <span class="notion-title">L'accord de l'adjectif</span>
+      <span class="notion-desc">Genre et nombre — règles et exceptions</span>
+      <span class="notion-tag">À venir</span>
+    </div>
+
+    <div class="notion-card soon">
+      <span class="notion-num">06</span>
+      <span class="notion-title">Les pronoms relatifs</span>
+      <span class="notion-desc"><em>qui, que, dont, où</em> — comment les distinguer</span>
+      <span class="notion-tag">À venir</span>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <p>Apprendre le français avec <span>Keb &amp; Bek</span></p>
+</footer>
+
+</body>
+</html>
