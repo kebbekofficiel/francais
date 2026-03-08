@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apprendre le français · L'impératif</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:      #1a1208;
+      --cream:    #f5f0e8;
+      --gold:     #c8922a;
+      --gold-lt:  #e8c060;
+      --rust:     #8b3a1a;
+      --pale:     #ede8dc;
+    }
+
+    body {
+      background-color: var(--cream);
+      color: var(--ink);
+      font-family: 'Crimson Pro', Georgia, serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background-image:
+        radial-gradient(ellipse at 20% 10%, rgba(200,146,42,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 90%, rgba(139,58,26,0.07) 0%, transparent 55%);
+    }
+
+    /* ── PAPER CARD ─────────────────────────────────── */
+    .card {
+      background: var(--cream);
+      border: 1px solid rgba(200,146,42,0.35);
+      box-shadow:
+        0 2px 6px rgba(0,0,0,0.08),
+        0 12px 40px rgba(0,0,0,0.10),
+        inset 0 0 60px rgba(200,146,42,0.04);
+      max-width: 640px;
+      width: 100%;
+      padding: 3.5rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--rust), var(--gold), var(--rust));
+    }
+
+    .card::after {
+      content: '✦';
+      position: absolute;
+      bottom: 1.4rem;
+      right: 1.8rem;
+      font-size: 0.9rem;
+      color: var(--gold);
+      opacity: 0.5;
+    }
+
+    /* ── ORNAMENT ───────────────────────────────────── */
+    .ornament {
+      text-align: center;
+      font-size: 1.4rem;
+      color: var(--gold);
+      letter-spacing: .5rem;
+      margin-bottom: 1.6rem;
+      opacity: 0.7;
+    }
+
+    /* ── HEADINGS ───────────────────────────────────── */
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--ink);
+      text-align: center;
+      margin-bottom: .5rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--rust);
+      margin-bottom: 2.4rem;
+    }
+
+    /* ── SCREEN TRANSITIONS ─────────────────────────── */
+    .screen {
+      animation: fadeIn .5s ease both;
+    }
+    .screen.hidden { display: none; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── LANGUAGE GRID ──────────────────────────────── */
+    .lang-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: .85rem;
+      margin-top: 1.8rem;
+    }
+
+    .lang-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .4rem;
+      padding: .9rem .6rem;
+      border: 1.5px solid rgba(200,146,42,0.3);
+      background: transparent;
+      cursor: pointer;
+      font-family: 'Crimson Pro', serif;
+      font-size: 1rem;
+      color: var(--ink);
+      transition: all .2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lang-btn .flag { font-size: 1.8rem; line-height: 1; }
+    .lang-btn .name { font-size: .95rem; }
+
+    .lang-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(200,146,42,0.12), transparent);
+      opacity: 0;
+      transition: opacity .2s;
+    }
+
+    .lang-btn:hover { border-color: var(--gold); color: var(--rust); }
+    .lang-btn:hover::before { opacity: 1; }
+    .lang-btn:hover .flag { transform: scale(1.1); transition: transform .2s; }
+
+    .lang-btn.selected {
+      border-color: var(--gold);
+      background: rgba(200,146,42,0.12);
+      color: var(--rust);
+      font-weight: 600;
+    }
+
+    /* ── CONTINUE BUTTON ────────────────────────────── */
+    .btn-continue {
+      display: block;
+      width: 100%;
+      margin-top: 2rem;
+      padding: 1rem 1.5rem;
+      background: var(--ink);
+      color: var(--cream);
+      border: none;
+      cursor: pointer;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      letter-spacing: .06em;
+      transition: background .2s, transform .15s;
+    }
+    .btn-continue:hover { background: var(--rust); transform: translateY(-1px); }
+    .btn-continue:disabled { opacity: .35; cursor: default; transform: none; background: var(--ink); }
+
+    /* ── EXPLANATION PAGE ───────────────────────────── */
+    .rule-box {
+      background: var(--pale);
+      border-left: 3px solid var(--gold);
+      padding: 1.2rem 1.4rem;
+      margin: 1.6rem 0;
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .example {
+      display: flex;
+      align-items: baseline;
+      gap: .7rem;
+      margin: .5rem 0;
+    }
+
+    .example .fr {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.35rem;
+      color: var(--rust);
+    }
+
+    .example .arrow { color: var(--gold); font-size: .9rem; }
+
+    .tip {
+      border: 1px dashed rgba(200,146,42,0.4);
+      padding: 1rem 1.2rem;
+      font-size: .98rem;
+      font-style: italic;
+      color: #555;
+      margin-top: 1.4rem;
+      line-height: 1.6;
+    }
+
+    .divider {
+      text-align: center;
+      color: var(--gold);
+      letter-spacing: .4rem;
+      font-size: .8rem;
+      margin: 1.8rem 0;
+      opacity: .6;
+    }
+
+    p { line-height: 1.75; font-size: 1.05rem; margin-bottom: .8rem; }
+
+    .btn-back {
+      background: transparent;
+      border: 1px solid rgba(0,0,0,0.2);
+      color: #777;
+      font-family: 'Crimson Pro', serif;
+      font-size: .95rem;
+      cursor: pointer;
+      padding: .5rem 1rem;
+      margin-top: 1.8rem;
+      transition: color .2s, border-color .2s;
+    }
+    .btn-back:hover { color: var(--rust); border-color: var(--rust); }
+
+    /* ── HIGHLIGHT VERB ─────────────────────────────── */
+    .hl { color: var(--rust); font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- ══ SCREEN 1 : CHOIX DE LANGUE ══ -->
+  <div id="screen1" class="screen">
+    <div class="ornament">✦ ✦ ✦</div>
+    <h1>Quelle est votre langue maternelle&nbsp;?</h1>
+    <p class="subtitle">What is your native language?</p>
+
+    <div class="lang-grid" id="langGrid">
+      <button class="lang-btn" data-lang="fr" onclick="selectLang(this)">
+        <span class="flag">🇫🇷</span><span class="name">Français</span>
+      </button>
+      <button class="lang-btn" data-lang="en" onclick="selectLang(this)">
+        <span class="flag">🇬🇧</span><span class="name">English</span>
+      </button>
+      <button class="lang-btn" data-lang="es" onclick="selectLang(this)">
+        <span class="flag">🇪🇸</span><span class="name">Español</span>
+      </button>
+      <button class="lang-btn" data-lang="pt" onclick="selectLang(this)">
+        <span class="flag">🇧🇷</span><span class="name">Português</span>
+      </button>
+      <button class="lang-btn" data-lang="de" onclick="selectLang(this)">
+        <span class="flag">🇩🇪</span><span class="name">Deutsch</span>
+      </button>
+      <button class="lang-btn" data-lang="it" onclick="selectLang(this)">
+        <span class="flag">🇮🇹</span><span class="name">Italiano</span>
+      </button>
+      <button class="lang-btn" data-lang="ar" onclick="selectLang(this)">
+        <span class="flag">🇸🇦</span><span class="name">العربية</span>
+      </button>
+      <button class="lang-btn" data-lang="zh" onclick="selectLang(this)">
+        <span class="flag">🇨🇳</span><span class="name">中文</span>
+      </button>
+    </div>
+
+    <button class="btn-continue" id="btnContinue" disabled onclick="showExplanation()">
+      Continuer →
+    </button>
+  </div>
+
+  <!-- ══ SCREEN 2 : EXPLICATION ══ -->
+  <div id="screen2" class="screen hidden"></div>
+
+</div>
+
+<script>
+  let selectedLang = null;
+
+  function selectLang(btn) {
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedLang = btn.dataset.lang;
+    document.getElementById('btnContinue').disabled = false;
+  }
+
+  // ── Contenus par langue ──────────────────────────────────────────────────
+  const content = {
+
+    fr: {
+      title: "L'impératif présent en français",
+      sub: "Le verbe <em>regarder</em> — 2<sup>e</sup> personne du singulier",
+      body: `
+        <p>Tu connais déjà l'indicatif présent : <span class="hl">tu regardes</span>.</p>
+        <p>Pour former l'impératif présent à la 2<sup>e</sup> personne du singulier avec un verbe du <strong>1<sup>er</sup> groupe</strong> (verbes en <em>-er</em>), il suffit de <strong>supprimer le <em>-s</em> final</strong> et d'omettre le pronom <em>tu</em>.</p>
+        <div class="rule-box">
+          <strong>Règle :</strong><br>
+          tu regard<u>es</u> &nbsp;→&nbsp; <span class="hl">Regard<strong>e</strong> !</span><br>
+          (on retire le <em>-s</em> et on supprime « tu »)
+        </div>
+        <div class="divider">· · ·</div>
+        <p><strong>Exemples avec le verbe <em>regarder</em> :</strong></p>
+        <div class="example">
+          <span class="fr">Regarde !</span>
+          <span class="arrow">→</span>
+          <span>Ordre direct (Look! / ¡Mira!)</span>
+        </div>
+        <div class="example">
+          <span class="fr">Regarde le tableau.</span>
+          <span class="arrow">→</span>
+          <span>Regarde quelque chose de précis</span>
+        </div>
+        <div class="example">
+          <span class="fr">Ne regarde pas.</span>
+          <span class="arrow">→</span>
+          <span>Forme négative (ne … pas)</span>
+        </div>
+        <div class="tip">
+          💡 <strong>À retenir :</strong> Tous les verbes en <em>-er</em> perdent leur <em>-s</em> à l'impératif 2<sup>e</sup> personne du singulier. C'est la grande exception par rapport aux autres groupes !
+        </div>
+      `
+    },
+
+    en: {
+      title: "The French Imperative",
+      sub: "Verb <em>regarder</em> (to look/watch) — 2<sup>nd</sup> person singular",
+      body: `
+        <p>In English, the imperative is simply the base form of the verb: <em>"Look!"</em>. French works similarly, but there is one key rule for <strong>-er verbs</strong> (like <em>regarder</em>).</p>
+        <div class="rule-box">
+          <strong>Rule:</strong><br>
+          Take the present tense <em>tu</em> form: <span class="hl">tu regard<u>es</u></span><br>
+          → Drop the <em>-s</em> and remove <em>tu</em>: <span class="hl">Regarde !</span>
+        </div>
+        <div class="divider">· · ·</div>
+        <p><strong>Examples with <em>regarder</em>:</strong></p>
+        <div class="example">
+          <span class="fr">Regarde !</span>
+          <span class="arrow">→</span>
+          <span>Look! / Watch!</span>
+        </div>
+        <div class="example">
+          <span class="fr">Regarde le tableau.</span>
+          <span class="arrow">→</span>
+          <span>Look at the board.</span>
+        </div>
+        <div class="example">
+          <span class="fr">Ne regarde pas.</span>
+          <span class="arrow">→</span>
+          <span>Don't look. (negative: <em>ne … pas</em>)</span>
+        </div>
+        <div class="tip">
+          💡 <strong>Key tip:</strong> All French <em>-er</em> verbs drop the final <em>-s</em> in the 2<sup>nd</sup> person singular imperative. This is unique to this group!
+        </div>
+      `
+    },
+
+    es: {
+      title: "El imperativo en francés",
+      sub: "Verbo <em>regarder</em> (mirar) — 2<sup>a</sup> persona del singular",
+      body: `
+        <p>En español conoces el imperativo: <em>"¡Mira!"</em>. En francés, los verbos del <strong>1<sup>er</sup> grupo</strong> (terminados en <em>-er</em>) siguen una regla sencilla.</p>
+        <div class="rule-box">
+          <strong>Regla:</strong><br>
+          Forma del presente con <em>tu</em>: <span class="hl">tu regard<u>es</u></span><br>
+          → Quita la <em>-s</em> y elimina <em>tu</em>: <span class="hl">Regarde !</span>
+        </div>
+        <div class="divider">· · ·</div>
+        <p><strong>Ejemplos con <em>regarder</em>:</strong></p>
+        <div class="example">
+          <span class="fr">Regarde !</span>
+          <span class="arrow">→</span>
+          <span>¡Mira!</span>
+        </div>
+        <div class="example">
+          <span class="fr">Regarde le tableau.</span>
+          <span class="arrow">→</span>
+          <span>Mira la pizarra.</span>
+        </div>
+        <div class="example">
+          <span class="fr">Ne regarde pas.</span>
+          <span class="arrow">→</span>
+          <span>No mires. (negación: <em>ne … pas</em>)</span>
+        </div>
+        <div class="tip">
+          💡 <strong>Para recordar:</strong> Todos los verbos en <em>-er</em> pierden la <em>-s</em> en el imperativo 2<sup>a</sup> persona del singular. ¡Es la excepción de este grupo!
+        </div>
+      `
+    },
+
+    pt: {
+      title: "O imperativo em francês",
+      sub: "Verbo <em>regarder</em> (olhar) — 2<sup>a</sup> pessoa do singular",
+      body: `
+        <p>Em português o imperativo é familiar: <em>"Olha!"</em>. Em francês, para os verbos do <strong>1º grupo</strong> (terminados em <em>-er</em>), aplica-se uma regra simples.</p>
+        <div class="rule-box">
+          <strong>Regra:</strong><br>
+          Presente com <em>tu</em>: <span class="hl">tu regard<u>es</u></span><br>
+          → Retira o <em>-s</em> e omite <em>tu</em>: <span class="hl">Regarde !</span>
+        </div>
+        <div class="divider">· · ·</div>
+        <p><strong>Exemplos com <em>regarder</em>:</strong></p>
+        <div class="example">
+          <span class="fr">Regarde !</span>
+          <span class="arrow">→</span>
+          <span>Olha! / Vê!</span>
+        </div>
+        <div class="example">
+          <span class="fr">Regarde le tableau.</span>
+          <span class="arrow">→</span>
+          <span>Olha para o quadro.</span>
+        </div>
+        <div class="example">
+          <span class="fr">Ne regarde pas.</span>
+          <span class="arrow">→</span>
+          <span>Não olhes. (negação: <em>ne … pas</em>)</span>
+        </div>
+        <div class="tip">
+          💡 <strong>Para lembrar:</strong> Todos os verbos em <em>-er</em> perdem o <em>-s</em> no imperativo 2<sup>a</sup> pessoa do singular. É a grande particularidade deste grupo!
+        </div>
+      `
+    },
+
+    de: {
+      title: "Der Imperativ im Französischen",
+      sub: "Verb <em>regarder</em> (schauen/ansehen) — 2. Person Singular",
+      body: `
+        <p>Im Deutschen lautet der Imperativ: <em>„Schau!"</em>. Im Französischen gilt für Verben der <strong>1. Gruppe</strong> (Endung <em>-er</em>) eine einfache Regel.</p>
+        <div class="rule-box">
+          <strong>Regel:</strong><br>
+          Präsensform mit <em>tu</em>: <span class="hl">tu regard<u>es</u></span><br>
+          → Das <em>-s</em> entfernen und <em>tu</em> weglassen: <span class="hl">Regarde !</span>
+        </div>
+        <div class="divider">· · ·</div>
+        <p><strong>Beispiele mit <em>regarder</em>:</strong></p>
+        <div class="example">
+          <span class="fr">Regarde !</span>
+          <span class="arrow">→</span>
+          <span>Schau! / Sieh!</span>
+        </div>
+        <div class="example">
+          <span class="fr">Regarde le tableau.</span>
+          <span class="arrow">→</span>
+          <span>Schau auf die Tafel.</span>
+        </div>
+        <div class="example">
+          <span class="fr">Ne regarde pas.</span>
+          <span class="arrow">→</span>
+          <span>Schau nicht. (Verneinung: <em>ne … pas</em>)</span>
+        </div>
+        <div class="tip">
+          💡 <strong>Merkhilfe:</strong> Alle <em>-er</em>-Verben verlieren das <em>-s</em> im Imperativ der 2. Person Singular — eine Besonderheit dieser Gruppe!
+        </div>
+      `
+    },
+
+    it: {
+      title: "L'imperativo in francese",
+      sub: "Verbo <em>regarder</em> (guardare) — 2<sup>a</sup> persona singolare",
+      body: `
+        <p>In italiano conosci l'imperativo: <em>"Guarda!"</em>. In francese, per i verbi del <strong>1° gruppo</strong> (in <em>-er</em>), si applica una semplice regola.</p>
+        <div class="rule-box">
+          <strong>Regola:</strong><br>
+          Presente con <em>tu</em>: <span class="hl">tu regard<u>es</u></span><br>
+          → Togli la <em>-s</em> e ometti <em>tu</em>: <span class="hl">Regarde !</span>
+        </div>
+        <div class="divider">· · ·</div>
+        <p><strong>Esempi con <em>regarder</em>:</strong></p>
+        <div class="example">
+          <span class="fr">Regarde !</span>
+          <span class="arrow">→</span>
+          <span>Guarda!</span>
+        </div>
+        <div class="example">
+          <span class="fr">Regarde le tableau.</span>
+          <span class="arrow">→</span>
+          <span>Guarda la lavagna.</span>
+        </div>
+        <div class="example">
+          <span class="fr">Ne regarde pas.</span>
+          <span class="arrow">→</span>
+          <span>Non guardare. (negazione: <em>ne … pas</em>)</span>
+        </div>
+        <div class="tip">
+          💡 <strong>Da ricordare:</strong> Tutti i verbi in <em>-er</em> perdono la <em>-s</em> all'imperativo 2<sup>a</sup> persona singolare. È la particolarità di questo gruppo!
+        </div>
+      `
+    },
+
+    ar: {
+      title: "صيغة الأمر في الفرنسية",
+      sub: "الفعل <em>regarder</em> (يُشاهد / ينظر) — المفرد المخاطب",
+      body: `
+        <p style="direction:rtl; text-align:right;">في العربية تعرف صيغة الأمر: <em>"انظر!"</em>. في الفرنسية، لأفعال <strong>المجموعة الأولى</strong> (المنتهية بـ <em>-er</em>) توجد قاعدة بسيطة.</p>
+        <div class="rule-box" style="direction:rtl; text-align:right;">
+          <strong>القاعدة:</strong><br>
+          صيغة المضارع مع <em>tu</em>: <span class="hl">tu regard<u>es</u></span><br>
+          ← احذف الـ <em>-s</em> واحذف <em>tu</em>: <span class="hl">Regarde !</span>
+        </div>
+        <div class="divider">· · ·</div>
+        <p style="direction:rtl; text-align:right;"><strong>أمثلة مع الفعل <em>regarder</em>:</strong></p>
+        <div class="example" style="flex-direction:row-reverse;">
+          <span class="fr">Regarde !</span>
+          <span class="arrow">←</span>
+          <span style="direction:rtl;">انظر! / شاهد!</span>
+        </div>
+        <div class="example" style="flex-direction:row-reverse;">
+          <span class="fr">Regarde le tableau.</span>
+          <span class="arrow">←</span>
+          <span style="direction:rtl;">انظر إلى اللوحة.</span>
+        </div>
+        <div class="example" style="flex-direction:row-reverse;">
+          <span class="fr">Ne regarde pas.</span>
+          <span class="arrow">←</span>
+          <span style="direction:rtl;">لا تنظر. (النفي: <em>ne … pas</em>)</span>
+        </div>
+        <div class="tip" style="direction:rtl; text-align:right;">
+          💡 <strong>للتذكر:</strong> جميع أفعال <em>-er</em> تفقد الـ <em>-s</em> في صيغة الأمر للمفرد المخاطب. هذه خاصية هذه المجموعة!
+        </div>
+      `
+    },
+
+    zh: {
+      title: "法语命令式",
+      sub: "动词 <em>regarder</em>（看）— 第二人称单数",
+      body: `
+        <p>在中文里，命令式很简单：<em>"看！"</em>。在法语中，<strong>第一组动词</strong>（以 <em>-er</em> 结尾）有一个简单的规则。</p>
+        <div class="rule-box">
+          <strong>规则：</strong><br>
+          现在时 <em>tu</em> 形式：<span class="hl">tu regard<u>es</u></span><br>
+          → 去掉 <em>-s</em>，去掉 <em>tu</em>：<span class="hl">Regarde !</span>
+        </div>
+        <div class="divider">· · ·</div>
+        <p><strong>例句（动词 <em>regarder</em>）：</strong></p>
+        <div class="example">
+          <span class="fr">Regarde !</span>
+          <span class="arrow">→</span>
+          <span>看！/ 瞧！</span>
+        </div>
+        <div class="example">
+          <span class="fr">Regarde le tableau.</span>
+          <span class="arrow">→</span>
+          <span>看黑板。</span>
+        </div>
+        <div class="example">
+          <span class="fr">Ne regarde pas.</span>
+          <span class="arrow">→</span>
+          <span>别看。（否定形式：<em>ne … pas</em>）</span>
+        </div>
+        <div class="tip">
+          💡 <strong>要记住：</strong>所有 <em>-er</em> 动词在第二人称单数命令式中都要去掉 <em>-s</em>，这是第一组动词的特点！
+        </div>
+      `
+    }
+  };
+
+  function showExplanation() {
+    if (!selectedLang) return;
+    const c = content[selectedLang];
+    const s2 = document.getElementById('screen2');
+
+    s2.innerHTML = `
+      <div class="ornament">✦ ✦ ✦</div>
+      <h1>${c.title}</h1>
+      <p class="subtitle">${c.sub}</p>
+      ${c.body}
+      <button class="btn-back" onclick="goBack()">← Revenir / Go back</button>
+    `;
+
+    document.getElementById('screen1').classList.add('hidden');
+    s2.classList.remove('hidden');
+    // re-trigger animation
+    s2.classList.remove('screen');
+    void s2.offsetWidth;
+    s2.classList.add('screen');
+  }
+
+  function goBack() {
+    document.getElementById('screen2').classList.add('hidden');
+    document.getElementById('screen1').classList.remove('hidden');
+    const s1 = document.getElementById('screen1');
+    s1.classList.remove('screen');
+    void s1.offsetWidth;
+    s1.classList.add('screen');
+  }
+</script>
+</body>
+</html>
